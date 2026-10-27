@@ -14,12 +14,17 @@ int main() {
     }
     chunksize = CHUNKSIZE;
 
+    double const start {omp_get_wtime()};
+
     #pragma omp parallel for \
         shared(a, b, c, chunksize) private(i) \
         schedule(static, chunksize)
     for (i = 0; i < N; ++i) {
         c[i] = a[i] + b[i];
     }
+
+    double elapsedTime {omp_get_wtime() - start};
+    std::cout << "Elapsed time = " << elapsedTime << std::endl;
 
     for (i = 0; i < 10; ++i) {
         std::cout << c[i] << '\n';
